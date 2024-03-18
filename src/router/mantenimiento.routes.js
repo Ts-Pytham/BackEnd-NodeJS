@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { actualizarMantenimiento, buscarMantenimiento, eliminarMantenimiento, listarMantenimientos, registrarMantenimiento } from '../controllers/mantenimiento.controllers.js';
-import { validarToken } from '../controllers/autenticacion.controllers.js';
+import { validarToken } from '../controllers/auth.controllers.js';
 import { validatorMante } from '../validation/validatorMantenimiento.js';
 
 const mantenimientoRouter = Router();

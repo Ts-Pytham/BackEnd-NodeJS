@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { actualizarAmbiente, buscarAmbientePorId, listarAmbientes, registrarAmbiente } from '../controllers/ambiente.controllers.js';
-import { validarToken } from '../controllers/autenticacion.controllers.js';
+import { validarToken } from '../controllers/auth.controllers.js';
 import validationAmbiente from '../validation/validationAmbiente.js';
 
 const ambienteRouter = Router();

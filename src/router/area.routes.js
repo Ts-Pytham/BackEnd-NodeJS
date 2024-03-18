@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { actualizarArea, buscarAreaPorId, listarArea, registrarArea } from '../controllers/area.controllers.js';
-import { validarToken } from '../controllers/autenticacion.controllers.js';
+import { validarToken } from '../controllers/auth.controllers.js';
 import validacionArea from '../validation/validatorarea.js';
 
 const areaRouter = Router();
