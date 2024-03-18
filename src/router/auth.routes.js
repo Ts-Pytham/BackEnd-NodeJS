@@ -1,8 +1,9 @@
 import express from 'express';
-import iniciarSesion from '../controllers/auth.controllers.js';
+import { iniciarSesion, registrarUsuario } from '../controllers/auth.controllers.js';
 
 const auth = express.Router();
 
 auth.post('/login', iniciarSesion);
+auth.post('/register', registrarUsuario)
 
 export default auth;
