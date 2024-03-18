@@ -3,8 +3,8 @@ import { pool } from '../database/conexion.js';
 export default class UsuarioRepository{
     async listarUsuarios(){
         try {
-            const result = await pool.query('SELECT * FROM usuarios');
-            return result.rows;
+            const [result] = await pool.query('SELECT * FROM usuario');
+            return result;
         } catch (error) {
             console.log(error);
         }
@@ -12,8 +12,8 @@ export default class UsuarioRepository{
 
     async buscarUsuarioPorIdentificacion(id){
         try {
-            const result = await pool.query('SELECT * FROM usuario WHERE Identificacion = ?', [id]);
-            return result.rows;
+            const [result] = await pool.query('SELECT * FROM usuario WHERE Identificacion = ?', [id]);
+            return result;
         } catch (error) {
             console.log(error);
         }
@@ -39,8 +39,18 @@ export default class UsuarioRepository{
 
     async actualizarUsuario(id, usuario){
         try {
-            const result = await pool.query('UPDATE usuario SET nombre = ?, apellido = ?, email = ?, password = ?, rol = ? WHERE id = ?', [usuario.nombre, usuario.apellido, usuario.email, usuario.password, usuario.rol, id]);
-            return result.rows;
+            const [result] = await pool.query('UPDATE usuario SET identificacion = ?, nombres = ?, apellidos = ?, telefono = ?, correo = ?, estado = ?, rol = ? WHERE id = ?',
+            [
+                usuario.identificacion, 
+                usuario.nombres, 
+                usuario.apellidos, 
+                usuario.telefono, 
+                usuario.correo, 
+                usuario.estado, 
+                usuario.rol,
+                id
+            ]);
+            return result.affectedRows;
         } catch (error) {
             console.log(error);
         }
@@ -48,8 +58,8 @@ export default class UsuarioRepository{
 
     async eliminarUsuario(id){
         try {
-            const result = await pool.query('DELETE FROM usuario WHERE id = ?', [id]);
-            return result.rows;
+            const [result] = await pool.query('DELETE FROM usuario WHERE id = ?', [id]);
+            return result.affectedRows;
         } catch (error) {
             console.log(error);
         }

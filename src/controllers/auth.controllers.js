@@ -44,7 +44,7 @@ export const registrarUsuario = async (req, res) => {
         }
 
         const result = await usuarioRepository.registrarUsuario(user);
-        
+
         if (result > 0) {
             return res.status(200).json({ 
                 'status':"200 OK",
@@ -63,15 +63,14 @@ export const registrarUsuario = async (req, res) => {
         });
     }
 };
-export const validarToken = (req, res) => {
+export const validarToken = (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
   
     if (token == null) return res.sendStatus(401)
   
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-      console.log(err)
-  
+    jwt.verify(token, process.env.AUT_SECRET, (err, user) => {
+
       if (err) return res.sendStatus(403)
   
       req.user = user

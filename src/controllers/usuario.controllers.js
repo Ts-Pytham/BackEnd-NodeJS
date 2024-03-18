@@ -1,11 +1,12 @@
-import jwt from 'jsonwebtoken';
 import { pool } from '../database/conexion.js';
-import { validationResult } from 'express-validator';
+import UsuarioRepository from '../repositories/usuarioRepository.js';
 
 export const buscarusuarios = async (req, res) => {
     try {
         let identificacion = req.params.identificacion;
-        const [result] = await pool.query(`SELECT * FROM usuario WHERE identificacion = '${identificacion}'`);
+        console.log(identificacion);
+        const usuarioRepository = new UsuarioRepository();
+        const result = await usuarioRepository.buscarUsuarioPorIdentificacion(identificacion);
 
         if (result.length > 0) {
             res.status(200).json(result[0]);
@@ -22,9 +23,10 @@ export const buscarusuarios = async (req, res) => {
 };
 
 
-export const listarusuarios = async (req, res) => {
+export const listarusuarios = async (_, res) => {
     try {
-        const [result] = await pool.query('SELECT * FROM usuario');
+        const usuarioRepository = new UsuarioRepository();
+        const result = await usuarioRepository.listarUsuarios();
         res.status(200).json(result);
     } catch(err) {
         res.status(500).json({ massage: 'Error en el servidor' + err.message });
@@ -35,14 +37,22 @@ export const actualizarUsuario = async (req, res) => {
     try{ 
         let id = req.params.id;
         let{identificacion,nombres,apellidos,telefono,correo,estado,rol} =req.body;
-        const contraseña = identificacion;
 
-        let sql = `UPDATE usuario SET identificacion='${identificacion}', nombres='${nombres}', apellidos='${apellidos}', telefono= '${telefono}', correo='${correo}', estado='${estado}', contraseña='${contraseña}', rol='${rol}'
-        WHERE id_usuario= ${id}`;
+        const usuarioRepository = new UsuarioRepository();
 
-        const [rows] = await pool.query(sql);
+        const user = {
+            identificacion,
+            nombres,
+            apellidos,
+            telefono,
+            correo,
+            estado,
+            rol,
+        }
+
+        const result = await usuarioRepository.actualizarUsuario(id, user);
         
-        if (rows.affectedRows > 0)
+        if (result > 0)
             return res.status(200).json({ 
                 'status':"200 OK",
                 'message':'Se actualizo con exito el Usuario',
