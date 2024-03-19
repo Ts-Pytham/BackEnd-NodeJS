@@ -39,7 +39,7 @@ export default class UsuarioRepository{
 
     async actualizarUsuario(id, usuario){
         try {
-            const [result] = await pool.query('UPDATE usuario SET identificacion = ?, nombres = ?, apellidos = ?, telefono = ?, correo = ?, estado = ?, rol = ? WHERE id = ?',
+            const [result] = await pool.query('UPDATE usuario SET identificacion = ?, nombres = ?, apellidos = ?, telefono = ?, correo = ?, estado = ?, rol = ? WHERE id_usuario = ?',
             [
                 usuario.identificacion, 
                 usuario.nombres, 
@@ -58,7 +58,10 @@ export default class UsuarioRepository{
 
     async eliminarUsuario(id){
         try {
-            const [result] = await pool.query('DELETE FROM usuario WHERE id = ?', [id]);
+            let sqlMantenimiento = `DELETE FROM mantenimiento WHERE id_usuario = ?`;
+            await pool.query(sqlMantenimiento, [id]);
+
+            const [result] = await pool.query('DELETE FROM usuario WHERE id_usuario = ?', [id]);
             return result.affectedRows;
         } catch (error) {
             console.log(error);

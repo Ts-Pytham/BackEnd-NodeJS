@@ -36,7 +36,7 @@ export const listarusuarios = async (_, res) => {
 export const actualizarUsuario = async (req, res) => {
     try{ 
         let id = req.params.id;
-        let{identificacion,nombres,apellidos,telefono,correo,estado,rol} =req.body;
+        let{ identificacion,nombres,apellidos,telefono,correo,estado,rol } =req.body;
 
         const usuarioRepository = new UsuarioRepository();
 
@@ -103,11 +103,10 @@ export const cambiarEstadoUsuario = async (req, res) => {
     try {
         const { identificacion } = req.params;
 
-        const sql = `UPDATE usuario SET estado = 'inactivo' WHERE identificacion = '${identificacion}'`;
+        const usuarioRepository = new UsuarioRepository();
+        const result = await usuarioRepository.buscarUsuarioPorIdentificacion(identificacion);
 
-        const [rows] = await pool.query(sql);
-
-        if (rows.affectedRows > 0) {
+        if (result > 0) {
             return res.status(200).json({ 
                 'status': "200 OK",
                 'message': 'Se actualizó con éxito el estado del usuario'

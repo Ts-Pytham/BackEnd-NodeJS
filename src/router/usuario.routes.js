@@ -7,8 +7,8 @@ const usuarioRouter = Router();
 
 usuarioRouter.get('/buscar/:identificacion', validarToken, buscarusuarios);
 usuarioRouter.get('/listar', listarusuarios);
-usuarioRouter.put('/actualizar/:id',  /*validarToken,*/ validateUsuario, actualizarUsuario);
-usuarioRouter.delete('/eliminar/:id',/*  validarToken,  */eliminarUsuario);
-usuarioRouter.put('/cambiarestado/:identificacion', /* validarToken,  */cambiarEstadoUsuario);
+usuarioRouter.put('/actualizar/:id', validarToken, validateUsuario, actualizarUsuario);
+usuarioRouter.delete('/eliminar/:id', validarToken, eliminarUsuario);
+usuarioRouter.put('/cambiarestado/:identificacion', validarToken, cambiarEstadoUsuario);
 
 export default usuarioRouter;
