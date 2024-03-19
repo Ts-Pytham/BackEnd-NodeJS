@@ -16,20 +16,19 @@ export default class AuthRepository {
         }
     }
 
-    validateToken(req, res) {
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1]
-    
-      if (token == null) return res.sendStatus(401)
-    
-      jwt.verify(token, process.env.AUT_SECRET, (err, user) => {
-        console.log(err)
-    
-        if (err) return res.sendStatus(403)
-    
-        req.user = user
-    
-        next()
-      })
+    async cambiarContraseña(id, antigua, nueva) {
+        try {
+            let sql = `UPDATE usuario SET contraseña = ? WHERE id_usuario = ? and contraseña = ?`;
+            const [rows] = await pool.query(sql, [nueva, id, antigua]);
+
+            if (rows.affectedRows > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            console.error('Error en el sistema:', e);
+            return false;
+        }
     }
 }

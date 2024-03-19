@@ -5,19 +5,19 @@ import { validationResult } from 'express-validator';
 
 export const iniciarSesion = async (req, res) => {
   try { 
-    const repository = new AuthRepository();
-    const result = await repository.validarUsuario(req.body.identificacion, req.body.contraseña);
+        const repository = new AuthRepository();
+        const result = await repository.validarUsuario(req.body.identificacion, req.body.contraseña);
 
-    if(result == true){
-        let token = jwt.sign({ user: req.body.identificacion }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
-        return res.status(200).json({ token: token, message: 'Usuario autorizado..' });
-    }else {
-        return res.status(400).json({ message: "Usuario inválido." });
-    }
-} catch (error) {
+        if(result == true){
+            let token = jwt.sign({ user: req.body.identificacion }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
+            return res.status(200).json({ token: token, message: 'Usuario autorizado..' });
+        }else {
+            return res.status(400).json({ message: "Usuario inválido." });
+        }
+    } catch (error) {
     console.error('Error en el inicio de sesión:', error);
     return res.status(500).json({ message: 'Error en el sistema' });
-}
+    }
 };
 
 export const registrarUsuario = async (req, res) => {
@@ -70,13 +70,27 @@ export const validarToken = (req, res, next) => {
     if (token == null) return res.sendStatus(401)
   
     jwt.verify(token, process.env.AUT_SECRET, (err, user) => {
-
-      if (err) return res.sendStatus(403)
-  
-      req.user = user
-  
-      next()
-    })
-  }
+        if (err) return res.sendStatus(403)
     
+        req.user = user
+    
+        next()
+    })
+};
+    
+export const cambiarclave = async (req, res) => {
+    try {
+        const repository = new AuthRepository();
+        const result = await repository.cambiarContraseña(req.body.id, req.body.antigua, req.body.nueva);
+
+        if(result == true){
+            return res.status(200).json({ message: 'Contraseña actualizada..' });
+        }else {
+            return res.status(400).json({ message: "Contraseña inválida." });
+        }
+    } catch (error) {
+        console.error('Error en el cambio de contraseña:', error);
+        return res.status(500).json({ message: 'Error en el sistema' });
+    }
+};
 export default iniciarSesion;
