@@ -6,8 +6,8 @@ import validacionArea from '../validation/validatorarea.js';
 const areaRouter = Router();
 
 areaRouter.get('/listar', listarArea);
-areaRouter.post('/registrar', /* validarToken, */ validacionArea, registrarArea);
-areaRouter.get('/buscar/:id', /* validarToken, */ buscarAreaPorId);
-areaRouter.put('/actualizar/:id', /* validarToken, */ validacionArea, actualizarArea);
+areaRouter.post('/registrar', validarToken, validacionArea, registrarArea);
+areaRouter.get('/buscar/:id', validarToken, buscarAreaPorId);
+areaRouter.put('/actualizar/:id', validarToken, validacionArea, actualizarArea);
 
 export default areaRouter;

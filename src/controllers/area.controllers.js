@@ -1,19 +1,13 @@
-import { pool } from '../database/conexion.js';
+import AreaRepository from '../repositories/areaRepository.js';
 
 export const registrarArea = async (req, res) => {
     try {
         const { nombre } = req.body;
 
-        const sql = `
-            INSERT INTO area (nombre)
-            VALUES (?)
-        `;
+        const areaRepository = new AreaRepository();
+        const result = await areaRepository.registrarArea(nombre);
 
-        const values = [nombre];
-
-        const [result] = await pool.query(sql, values);
-
-        if (result.affectedRows > 0) {
+        if (result > 0) {
             return res.status(200).json({
                 status: "200 OK",
                 message: 'Area registrado con éxito',
@@ -36,7 +30,8 @@ export const registrarArea = async (req, res) => {
 
 export const listarArea = async (req, res) => {
     try {
-        const [result] = await pool.query('select * from area');
+        const areaRepository = new AreaRepository();
+        const result = await areaRepository.listarAreas();
         res.status(200).json(result);
   
     } catch (e) {
@@ -48,14 +43,8 @@ export const listarArea = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const sql = `
-            SELECT * FROM area
-            WHERE id_area = ?
-        `;
-
-        const values = [id];
-
-        const [result] = await pool.query(sql, values);
+        const areaRepository = new AreaRepository();
+        const result = await areaRepository.buscarAreaPorId(id);
 
         if (result.length > 0) {
             return res.status(200).json(result[0]);
@@ -79,10 +68,10 @@ export const actualizarArea = async (req, res) => {
         let id = req.params.id;
         let{nombre} =req.body;
 
-        let sql = `UPDATE area SET nombre=? WHERE id_area=?`;
-        const [rows] = await pool.query(sql, [nombre, id]);        
-        
-        if (rows.affectedRows > 0)
+        const areaRepository = new AreaRepository();
+        const result = await areaRepository.actualizarArea(id, nombre);
+
+        if (result > 0)
             return res.status(200).json({ 
                 'status':"200 OK",
                 'message':'Se actualizo con exito el area',

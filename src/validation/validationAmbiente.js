@@ -6,7 +6,7 @@ const validationAmbiente = [
         .isLength({ min: 3, max: 50 }).withMessage('El nombre debe tener entre 2 y 50 caracteres')
         .trim().withMessage('No se permiten espacios al inicio o al final')
         .customSanitizer(value => {
-            return value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+            return value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, ' ');
         }).withMessage('No se permiten caracteres especiales'),
 
         (req, res, next) => {
