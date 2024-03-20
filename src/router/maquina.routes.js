@@ -5,7 +5,7 @@ import { validatorMaqui } from '../validation/validatorMaquina.js';
 
 const maquinaRouter = Router();
 
-maquinaRouter.post('/registrar', /* validarToken, */ cargarImagen, validatorMaqui, registrarMaquina);
+maquinaRouter.post('/registrar', validarToken('tecnico'),  cargarImagen, validatorMaqui, registrarMaquina);
 maquinaRouter.get('/buscar/:id', buscarMaquina);
 maquinaRouter.get('/listar', listarMaquinas);
 maquinaRouter.put('/debaja/:id', /* validarToken, */ darDeBajaMaquina);
