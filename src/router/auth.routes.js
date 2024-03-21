@@ -1,5 +1,5 @@
 import express from 'express';
-import { iniciarSesion, registrarUsuario, cambiarclave } from '../controllers/auth.controllers.js';
+import { iniciarSesion, registrarUsuario, cambiarclave, validarToken } from '../controllers/auth.controllers.js';
 import { ROLES } from '../helpers/constants.js';
 
 const auth = express.Router();
