@@ -6,13 +6,13 @@ export default class AuthRepository {
             const [rows] = await pool.query(sql, [identificacion, contraseña]);
 
             if (rows.length > 0) {
-                return true;
+                return rows[0].rol;
             } else {
-                return false;
+                return null;
             }
         } catch (e) {
             console.error('Error en el sistema:', e);
-            return false;
+            return null;
         }
     }
 

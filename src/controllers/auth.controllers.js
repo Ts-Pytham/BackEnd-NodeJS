@@ -8,8 +8,8 @@ export const iniciarSesion = async (req, res) => {
         const repository = new AuthRepository();
         const result = await repository.validarUsuario(req.body.identificacion, req.body.contraseña);
 
-        if(result == true){
-            let token = jwt.sign({ user: req.body.identificacion }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
+        if(result != null){
+            let token = jwt.sign({ user: req.body.identificacion, role: result }, process.env.AUT_SECRET, { expiresIn: process.env.AUT_EXPIRE });
             return res.status(200).json({ token: token, message: 'Usuario autorizado..' });
         }else {
             return res.status(400).json({ message: "Usuario inválido." });
