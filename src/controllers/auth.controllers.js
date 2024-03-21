@@ -2,6 +2,7 @@ import AuthRepository from '../repositories/authRepository.js';
 import UsuarioRepository from '../repositories/usuarioRepository.js';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
+import { ROLES } from '../helpers/constants.js'
 
 export const iniciarSesion = async (req, res) => {
   try { 
@@ -63,20 +64,27 @@ export const registrarUsuario = async (req, res) => {
         });
     }
 };
-export const validarToken = (req, res, next) => {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
+export const validarToken = (rolRequerido) => (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
   
-    if (token == null) return res.sendStatus(401)
+    if (token == null) return res.sendStatus(401);
   
     jwt.verify(token, process.env.AUT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403)
-    
-        req.user = user
-    
-        next()
-    })
-};
+      if (err) return res.sendStatus(403);
+  
+      if (rolRequerido === ROLES.tec && user.role === ROLES.user) {
+        return res.status(403).json({ mensaje: 'Acceso no autorizado' });
+      }
+      if (rolRequerido === ROLES.admin && user.role !== rolRequerido) {
+        return res.status(403).json({ mensaje: 'Acceso no autorizado' });
+      }
+  
+      req.user = user;
+  
+      next();
+    });
+  };
     
 export const cambiarclave = async (req, res) => {
     try {
