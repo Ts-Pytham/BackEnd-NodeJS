@@ -6,7 +6,7 @@ import { ROLES } from '../helpers/constants.js';
 
 const ambienteRouter = Router();
 
-ambienteRouter.get('/listar', listarAmbientes);
+ambienteRouter.get('/listar', validarToken(ROLES.admin), listarAmbientes);
 ambienteRouter.post('/registrar', validarToken(ROLES.admin), validationAmbiente, registrarAmbiente);
 ambienteRouter.get('/buscar/:id', validarToken(ROLES.admin), buscarAmbientePorId);
 ambienteRouter.put('/actualizar/:id', validarToken(ROLES.admin), validationAmbiente, actualizarAmbiente);
